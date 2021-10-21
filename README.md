@@ -25,6 +25,11 @@ https://docs.github.com/en/actions/automating-builds-and-tests/building-and-test
 This refers to the code contained in the repository https://github.com/stanleynguyen/amongus-todo.  In order
 not to run into unnecessary confusions, I copied the code and create this separate repository instead of performing a fork. 
 You may refer to the original repository for original `README.me` and other documentation.
+
+## Automated Test in CI/CD pipeline
+
+The application has `tests/server.test.js`.  This is executed as the first step of the Github action.
+
    
 ## Dockerized/containerised the Application
 
