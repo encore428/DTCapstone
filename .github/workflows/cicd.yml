@@ -37,5 +37,5 @@ jobs:
         repo: dt-ecr-1
         region: us-east-2
         tags: latest,${{ github.sha }}
-        create_repo: false
+        create_repo: true
         image_scanning_configuration: true
