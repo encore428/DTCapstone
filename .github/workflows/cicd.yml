@@ -36,6 +36,6 @@ jobs:
         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         repo: dt-ecr-1
         region: us-east-2
-        tags: latest,${{ github.sha }}
+        tags: latest,608290413320.dkr.ecr.us-east-2.amazonaws.com
         create_repo: false
         image_scanning_configuration: true
