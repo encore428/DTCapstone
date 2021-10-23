@@ -37,6 +37,6 @@ jobs:
         account_id: 608290413320
         repo: dt-ecr-1
         region: us-east-2
-        tags: ${{ github.sha }}
+        tags: 608290413320.dkr.ecr.us-east-2.amazonaws.com/dt-ecr-1
         create_repo: true
         image_scanning_configuration: true
