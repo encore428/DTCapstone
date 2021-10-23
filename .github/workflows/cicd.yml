@@ -33,9 +33,9 @@ jobs:
       with:
         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+        account_id: 608290413320
         repo: dt-ecr-1
         region: us-east-2
-        tags: latest,608290413320.dkr.ecr.us-east-2.amazonaws.com
+        tags: latest,${{ github.sha }}
         create_repo: false
         image_scanning_configuration: true
