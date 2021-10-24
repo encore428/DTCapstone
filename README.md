@@ -16,8 +16,28 @@ x The CI/CD pipeline must include Automated tests
 
 https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python
 
+to build and push image to ecr
+https://towardsaws.com/build-push-docker-image-to-aws-ecr-using-github-actions-8396888a8f9e
 
 
+to create ecr in aws using terraform
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository
+
+aws ecr push and ecs deploy
+https://github.com/marketplace/actions/ecr-push-and-ecs-deploy
+
+AWS: create cluster which will create an ec2 instance, then in the cluster create a task, task has a related container and 
+image (which has been pushed to a ecr earlier on), some port mapping, security policy allow incoming traffic; go to 
+cluster and run the task.
+https://www.youtube.com/watch?v=zs3tyVgiBQQ
+
+create cluster
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster
+
+
+The following may be useful but is too complicated. Anyone who can understand and implement this post do not need this post.
+The author is just showing off his knowledge.
+https://dev.to/thnery/create-an-aws-ecs-cluster-using-terraform-g80
 
 
 ## Deploy the amongus-todo Application
