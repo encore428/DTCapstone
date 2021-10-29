@@ -2,18 +2,17 @@
 
 ## Requirements:
 
------------------------------------------------------------------------------------|--------------------------------------------------------------------------
-Project Requirements                                                               | The amongus-todo app
------------------------------------------------------------------------------------|--------------------------------------------------------------------------
-Deploy a node.js application                                                       | The amongus-todo app
-to a VM/server of a cloud provider of your choice.                                 | aws.amazon.com
-The application will have some basic tests                                         | the application has tests/server.test.js
-The application must be dockerized/containerised                                   | docker image is built as part of Github action
-The project must include a CI/CD pipeline using a CI/CD tool of your choice        | Github action is used
-The CI/CD pipeline must include Automated tests                                    | tests/server.test.js is executed as part of Github action
-The CI/CD pipeline must include Automated Deployment to the cloud provider         | docker image is built and pushed to ams ecr as part of Github action
-The VM/server and other infrastructural resources must be created using Terraform  | full set of infrastructure is build using terraform
-Infra creation can be done by invoking Terraform commands locally                  | terraform is invoked locally.
+Project Requirements                                                                 | Fulfillment
+-------------------------------------------------------------------------------------|--------------------------------------------------------------------------
+1.Deploy a node.js application                                                       | The amongus-todo app
+2.to a VM/server of a cloud provider of your choice.                                 | aws.amazon.com
+3.The application will have some basic tests                                         | the application has `tests/server.test.js`
+4.The application must be dockerized/containerised                                   | docker image is built as part of Github action
+5.The project must include a CI/CD pipeline using a CI/CD tool of your choice        | Github action is used
+6.The CI/CD pipeline must include Automated tests                                    | tests/server.test.js is executed as part of Github action
+7.The CI/CD pipeline must include Automated Deployment to the cloud provider         | docker image is built and pushed to ams ecr as part of Github action
+8.The VM/server and other infrastructural resources must be created using Terraform  | full set of infrastructure is build using terraform
+9.Infra creation can be done by invoking Terraform commands locally                  | terraform is invoked locally.
 
 
 ## 1. Deploy the amongus-todo Application
@@ -24,15 +23,15 @@ You may refer to the original repository for original `README.me` and other docu
 
 ## 2. AWS selected as the cloud provider
 
-AWS was selected for this project due to earlier involvement and experiences.
+AWS was selected for this project due to earlier practices.
 
 ## 3. Application has some basic tests
 
-The application has `tests/server.test.js`.  This is used for as basic test.
+The application has `tests/server.test.js`.  This is used for basic test.
 
 ## 4. Dockerized/containerised the Application
 
-`Dockerfile` was created.  This is referenced during the CI/CD process to build a docker iamge of the app.  The docker image has
+`Dockerfile` was created.  This is referenced during the CI/CD process to build a docker image of the app.  The docker image has
 start up commands embedded to make it executable and thus containerised.
 
 ## 5. CI/CD Pipeline over Github Action
@@ -90,10 +89,11 @@ Two versions of .tf files were created:
 
 ## 1. Terraform to create ecr
 
-Use `cp ecr.tf.txt infra.tf`, followed by `terraform apply` to create aws ecr:
+Terraform `ecr.tf.txt` to create aws ecr:
 
 ```bash
 deng@LSOASUS2019:~$ cd /mnt/c/Users/deng/DTCapstone/terraform/aws
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ cp ecr.tf.txt infra.tf
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform apply
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
@@ -150,9 +150,10 @@ App dockerized image created and pushed to ecr taggd latest:
 
 ## 3. Terraform to create the rest of infra
 
-Use `cp main.tf.txt infra.tf`, followed by `terraform apply` to create the remaining part of the full infrastructure.
+Terraform `main.tf.txt` to create the remaining part of the full infrastructure.
 
 ```bash
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ cp main.tf.txt infra.tf
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform apply
 aws_ecr_repository.my_first_ecr_repo: Refreshing state... [id=my-first-ecr-repo]
 
@@ -231,7 +232,7 @@ App todos page (http://test-lb-tf-145880904.us-east-2.elb.amazonaws.com/todos):
 
 ## 4. Modify the app and CI/CD
 
-Modify the app by adding ` (more text)` to "text" of the first record in `db.json`, and the change is pushed to github.
+Modify the app by adding ` (more text)` to "text" of the first record in `db.json`, and push the change to github.
 
 ```
 {
@@ -252,7 +253,7 @@ ECR has an updated image
 
 ## 5. Deploy new image
 
-Updated app image is not auto deployed.  To deploy the new image, terraformed is invoked locally to first tear down the infrastruture, and then recreate.
+Updated app image is not auto deployed to the executing instances.  To deploy the new image, terraform is invoked locally to first tear down the infrastruture, and then recreate.
 
 Use `cp ecr.tf.txt infra.tf`, followed by `terraform apply` to tear down the infra leaving only the ecr.
 
@@ -261,9 +262,68 @@ Use `cp main.tf.txt infra.tf`, followed by `terraform apply` to re-create the fu
 App todos page (http://test-lb-tf-923086891.us-east-2.elb.amazonaws.com/todos) reflects changes deployed:
 ![App todos page](./docs/img/todo2.png)
 
+## 6. Complete Tear Down
+
+Use  `terraform destroy` to tear down the entire infrastructure at AWS.
+
+```
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform destroy
+aws_default_subnet.default_subnet_c: Refreshing state... [id=subnet-3a8dbb76]
+...
+    }
+
+Plan: 0 to add, 0 to change, 15 to destroy.
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+  
+aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy: Destroying... [id=ecsTaskExecutionRole-20211029103418578800000002]
+aws_ecs_service.my_first_service: Destroying... [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service]
+aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy: Destruction complete after 1s
+aws_ecs_service.my_first_service: Still destroying... [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service, 10s elapsed]
+aws_ecs_service.my_first_service: Still destroying... [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service, 20s elapsed]
+...
+aws_ecs_service.my_first_service: Still destroying... [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service, 6m10s elapsed]
+aws_ecs_service.my_first_service: Still destroying... [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service, 6m20s elapsed]
+aws_ecs_service.my_first_service: Destruction complete after 6m20s
+aws_ecs_cluster.my_cluster: Destroying... [id=arn:aws:ecs:us-east-2:608290413320:cluster/my-cluster]
+aws_ecs_task_definition.my_first_task: Destroying... [id=my-first-task]
+aws_security_group.service_security_group: Destroying... [id=sg-0609f3ae1e001bb50]
+aws_lb_listener.listener: Destroying... [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:listener/app/test-lb-tf/3b9915b9ae30c32c/0924c7c832da8a1f]
+aws_ecs_task_definition.my_first_task: Destruction complete after 1s
+aws_ecr_repository.my_first_ecr_repo: Destroying... [id=my-first-ecr-repo]
+aws_iam_role.ecsTaskExecutionRole: Destroying... [id=ecsTaskExecutionRole]
+aws_lb_listener.listener: Destruction complete after 1s
+aws_lb_target_group.target_group: Destroying... [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:targetgroup/target-group/2e5c8e54f73e8117]
+aws_alb.application_load_balancer: Destroying... [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:loadbalancer/app/test-lb-tf/3b9915b9ae30c32c]
+aws_ecs_cluster.my_cluster: Destruction complete after 2s
+aws_lb_target_group.target_group: Destruction complete after 2s
+aws_default_vpc.default_vpc: Destroying... [id=vpc-6f751d04]
+aws_default_vpc.default_vpc: Destruction complete after 0s
+aws_security_group.service_security_group: Destruction complete after 3s
+aws_ecr_repository.my_first_ecr_repo: Destruction complete after 3s
+aws_iam_role.ecsTaskExecutionRole: Destruction complete after 3s
+aws_alb.application_load_balancer: Destruction complete after 5s
+aws_default_subnet.default_subnet_c: Destroying... [id=subnet-3a8dbb76]
+aws_default_subnet.default_subnet_b: Destroying... [id=subnet-3a27e947]
+aws_default_subnet.default_subnet_a: Destroying... [id=subnet-908c1cfb]
+aws_security_group.load_balancer_security_group: Destroying... [id=sg-069e6225916b71959]
+aws_default_subnet.default_subnet_b: Destruction complete after 0s
+aws_default_subnet.default_subnet_c: Destruction complete after 0s
+aws_default_subnet.default_subnet_a: Destruction complete after 0s
+aws_security_group.load_balancer_security_group: Still destroying... [id=sg-069e6225916b71959, 10s elapsed]
+aws_security_group.load_balancer_security_group: Still destroying... [id=sg-069e6225916b71959, 20s elapsed]
+aws_security_group.load_balancer_security_group: Destruction complete after 25s
+
+Destroy complete! Resources: 15 destroyed.
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$
+```
 
 
-## References
+# References
 
 Many blog posts were consulted and tried when working on this project.
 
