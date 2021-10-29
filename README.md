@@ -6,24 +6,14 @@
 Project Requirements                                                                  | The amongus-todo app
 --------------------------------------------------------------------------------------|-----------------------------
 1. Deploy a node.js application                                                       | The amongus-todo app
-                                                                                      |
 2. to a VM/server of a cloud provider of your choice.                                 | aws.amazon.com
-                                                                                      |
 3. The application will have some basic tests                                         | the application has tests/server.test.js
-                                                                                      |
 4. The application must be dockerized/containerised                                   | docker image is built as part of Github action
-                                                                                      |
 5. The project must include a CI/CD pipeline using a CI/CD tool of your choice        | Github action is used
-                                                                                      |
 6. The CI/CD pipeline must include Automated tests                                    | tests/server.test.js is executed as part of Github action
-                                                                                      | 
 7. The CI/CD pipeline must include Automated Deployment to the cloud provider         | docker image is built and pushed to ams ecr as part of Github action
-                                                                                      |
 8. The VM/server and other infrastructural resources must be created using Terraform  | full set of infrastructure is build using terraform
-                                                                                      |
 9. Infra creation can be done by invoking Terraform commands locally                  | terraform is invoked locally.
-
-
 
 
 ## 1. Deploy the amongus-todo Application
@@ -59,7 +49,7 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
-	...
+...
       - name: Run tests
         run: npm test
 
@@ -77,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: run-test
     steps:
-	...
+...
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -96,7 +86,7 @@ Two versions of .tf files were created:
   push docker images of the app to this repository by the tag `latest`'.
 - `main.tf.txt`: This version of `.tf` has the same aws ecr repository by the name `my_first_ecr_repo`, plus another 14 components to set up the infrastructure to host the app.
 
-# Exection
+## 9. Manual Local invokation of terraform infra creation
 
 1. `cp ecr.tf.txt infra.tf`, followed by `terraform apply`:
 
@@ -143,8 +133,262 @@ aws_ecr_repository.my_first_ecr_repo: Creation complete after 3s [id=my-first-ec
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$
 ```
+![ecr created in aws](./docs/img/ecr1.png)
 
 2. Invoke Github CI/CD by making and pushing changes in the github app repository.
+
+Workflow executed successfully:
+![github workflow in action](./docs/img/cicd1.png)
+
+App dockerized image created and pushed to ecr taggd latest:
+![latest created in ecr](./docs/img/ecr2.png)
+
+3.`cp main.tf.txt infra.tf`, followed by `terraform apply`:
+```bash
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform apply
+aws_ecr_repository.my_first_ecr_repo: Refreshing state... [id=my-first-ecr-repo]
+
+Note: Objects have changed outside of Terraform
+
+Terraform detected the following changes made outside of Terraform since the last "terraform apply":
+
+  # aws_ecr_repository.my_first_ecr_repo has been changed
+  ~ resource "aws_ecr_repository" "my_first_ecr_repo" {
+        id                   = "my-first-ecr-repo"
+        name                 = "my-first-ecr-repo"
+      + tags                 = {}
+        # (4 unchanged attributes hidden)
+
+        # (1 unchanged block hidden)
+    }
+
+Unless you have made equivalent changes to your configuration, or ignored the relevant attributes using ignore_changes,
+the following plan may include actions to undo or respond to these changes.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_alb.application_load_balancer will be created
+  + resource "aws_alb" "application_load_balancer" {
+...
+      + name                       = "test-lb-tf"
+...
+    }
+
+  # aws_default_subnet.default_subnet_a will be created
+  + resource "aws_default_subnet" "default_subnet_a" {
+...
+      + availability_zone               = "us-east-2a"
+...
+    }
+
+  # aws_default_subnet.default_subnet_b will be created
+  + resource "aws_default_subnet" "default_subnet_b" {
+...
+      + availability_zone               = "us-east-2b"
+...
+    }
+
+  # aws_default_subnet.default_subnet_c will be created
+  + resource "aws_default_subnet" "default_subnet_c" {
+...
+      + availability_zone               = "us-east-2c"
+...
+    }
+
+  # aws_default_vpc.default_vpc will be created
+  + resource "aws_default_vpc" "default_vpc" {
+...
+    }
+
+  # aws_ecs_cluster.my_cluster will be created
+  + resource "aws_ecs_cluster" "my_cluster" {
+...
+      + name = "my-cluster"
+    }
+
+  # aws_ecs_service.my_first_service will be created
+  + resource "aws_ecs_service" "my_first_service" {
+...
+      + launch_type                        = "FARGATE"
+      + name                               = "my-first-service"
+...
+      + load_balancer {
+          + container_name   = "my-first-task"
+          + container_port   = 3000
+...
+        }
+...
+    }
+
+  # aws_ecs_task_definition.my_first_task will be created
+  + resource "aws_ecs_task_definition" "my_first_task" {
+      + arn                      = (known after apply)
+      + container_definitions    = jsonencode(
+            [
+              + {
+...
+                  + image        = "608290413320.dkr.ecr.us-east-2.amazonaws.com/my-first-ecr-repo"
+                  + memory       = 512
+                  + name         = "my-first-task"
+                  + portMappings = [
+                      + {
+                          + containerPort = 3000
+                          + hostPort      = 3000
+                        },
+                    ]
+                },
+            ]
+        )
+...
+      + family                   = "my-first-task"
+...
+      + network_mode             = "awsvpc"
+      + requires_compatibilities = [
+          + "FARGATE",
+        ]
+...
+    }
+
+  # aws_iam_role.ecsTaskExecutionRole will be created
+  + resource "aws_iam_role" "ecsTaskExecutionRole" {
+...
+      + name                  = "ecsTaskExecutionRole"
+    }
+
+  # aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy will be created
+  + resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
+...
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      + role       = "ecsTaskExecutionRole"
+    }
+
+  # aws_lb_listener.listener will be created
+  + resource "aws_lb_listener" "listener" {
+...
+    }
+
+  # aws_lb_target_group.target_group will be created
+  + resource "aws_lb_target_group" "target_group" {
+...
+      + name                               = "target-group"
+      + port                               = 3000
+...
+    }
+
+  # aws_security_group.load_balancer_security_group will be created
+  + resource "aws_security_group" "load_balancer_security_group" {
+...
+    }
+
+  # aws_security_group.service_security_group will be created
+  + resource "aws_security_group" "service_security_group" {
+...
+    }
+
+Plan: 14 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_default_subnet.default_subnet_b: Creating...
+aws_default_subnet.default_subnet_a: Creating...
+aws_default_vpc.default_vpc: Creating...
+aws_iam_role.ecsTaskExecutionRole: Creating...
+aws_ecs_cluster.my_cluster: Creating...
+aws_default_subnet.default_subnet_c: Creating...
+aws_security_group.load_balancer_security_group: Creating...
+aws_default_subnet.default_subnet_c: Creation complete after 3s [id=subnet-3a8dbb76]
+aws_default_subnet.default_subnet_a: Creation complete after 3s [id=subnet-908c1cfb]
+aws_default_subnet.default_subnet_b: Creation complete after 3s [id=subnet-3a27e947]
+aws_iam_role.ecsTaskExecutionRole: Creation complete after 3s [id=ecsTaskExecutionRole]
+aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy: Creating...
+aws_ecs_task_definition.my_first_task: Creating...
+aws_ecs_task_definition.my_first_task: Creation complete after 3s [id=my-first-task]
+aws_iam_role_policy_attachment.ecsTaskExecutionRole_policy: Creation complete after 3s [id=ecsTaskExecutionRole-20211029092114404200000002]
+aws_security_group.load_balancer_security_group: Creation complete after 10s [id=sg-01467773d9e662ecc]
+aws_security_group.service_security_group: Creating...
+aws_alb.application_load_balancer: Creating...
+aws_default_vpc.default_vpc: Still creating... [10s elapsed]
+aws_ecs_cluster.my_cluster: Still creating... [10s elapsed]
+aws_default_vpc.default_vpc: Creation complete after 13s [id=vpc-6f751d04]
+aws_lb_target_group.target_group: Creating...
+aws_ecs_cluster.my_cluster: Creation complete after 14s [id=arn:aws:ecs:us-east-2:608290413320:cluster/my-cluster]
+aws_lb_target_group.target_group: Creation complete after 5s [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:targetgroup/target-group/f8c1647007cfc53e]
+aws_security_group.service_security_group: Creation complete after 9s [id=sg-0243afc43ef82f6f3]
+aws_alb.application_load_balancer: Still creating... [10s elapsed]
+aws_alb.application_load_balancer: Still creating... [20s elapsed]
+aws_alb.application_load_balancer: Still creating... [30s elapsed]
+aws_alb.application_load_balancer: Still creating... [40s elapsed]
+aws_alb.application_load_balancer: Still creating... [50s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m0s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m10s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m20s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m30s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m40s elapsed]
+aws_alb.application_load_balancer: Still creating... [1m50s elapsed]
+aws_alb.application_load_balancer: Still creating... [2m0s elapsed]
+aws_alb.application_load_balancer: Still creating... [2m10s elapsed]
+aws_alb.application_load_balancer: Creation complete after 2m20s [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:loadbalancer/app/test-lb-tf/2e45bd76e4d74646]
+aws_lb_listener.listener: Creating...
+aws_lb_listener.listener: Creation complete after 2s [id=arn:aws:elasticloadbalancing:us-east-2:608290413320:listener/app/test-lb-tf/2e45bd76e4d74646/f3ff1a140920dd5a]
+aws_ecs_service.my_first_service: Creating...
+aws_ecs_service.my_first_service: Creation complete after 3s [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service]
+
+Apply complete! Resources: 14 added, 0 changed, 0 destroyed.
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$
+```
+
+ECS Cluster created
+![ECS Cluster created](./docs/img/ecs.png)
+
+Cluster details
+![ECS Cluster details](./docs/img/cluster.png)
+
+Service details
+![ECS Service details](./docs/img/service.png)
+
+Tasks in Service
+![ECS Service Tasks](./docs/img/tasks.png)
+
+Target group
+![ECS target group](./docs/img/target_gp1.png)
+
+Target group details
+![ECS target group details](./docs/img/target_gp3.png)
+
+Load balancer, the URL to access the app can be found under `DNS nmae`:
+![Load balancer](./docs/img/loadbalancer.png)
+
+App front page (test-lb-tf-145880904.us-east-2.elb.amazonaws.com):
+![App front page](./docs/img/app1.png)
+
+App todos page (http://test-lb-tf-145880904.us-east-2.elb.amazonaws.com/todos):
+![App todos page](./docs/img/todo1.png)
+
+4. Modif the app and push to github:
+
+` (more text)` is added to "text" of the first record in `db.json`, and the change is pushed to github.
+```
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "Align Engine Output (more text)",
+      "type": "long"
+    },
+
+```
+
+
 
 
 - `secrets.SNYK_TOKEN` has to be set-up as one of the secrets in this repository.  The value of the secret is to be obtained
