@@ -2,117 +2,150 @@
 
 ## Requirements:
 
-x Deploy a node.js application (the amongus-todo app)
-- to a VM/server of a cloud provider of your choice. 
-- The application will have some basic tests
-x The application must be dockerized/containerised
-x The project must include a CI/CD pipeline using a CI/CD tool of your choice
-x The CI/CD pipeline must include Automated tests
-- The CI/CD pipeline must include Automated Deployment to the cloud provider
-- The VM/server and other infrastructural resources must be created using Terraform
-- Infra creation can be done by invoking Terraform commands locally 
+--------------------------------------------------------------------------------------|-----------------------------
+Project Requirements                                                                  | The amongus-todo app
+--------------------------------------------------------------------------------------|-----------------------------
+1. Deploy a node.js application                                                       | The amongus-todo app
+                                                                                      |
+2. to a VM/server of a cloud provider of your choice.                                 | aws.amazon.com
+                                                                                      |
+3. The application will have some basic tests                                         | the application has tests/server.test.js
+                                                                                      |
+4. The application must be dockerized/containerised                                   | docker image is built as part of Github action
+                                                                                      |
+5. The project must include a CI/CD pipeline using a CI/CD tool of your choice        | Github action is used
+                                                                                      |
+6. The CI/CD pipeline must include Automated tests                                    | tests/server.test.js is executed as part of Github action
+                                                                                      | 
+7. The CI/CD pipeline must include Automated Deployment to the cloud provider         | docker image is built and pushed to ams ecr as part of Github action
+                                                                                      |
+8. The VM/server and other infrastructural resources must be created using Terraform  | full set of infrastructure is build using terraform
+                                                                                      |
+9. Infra creation can be done by invoking Terraform commands locally                  | terraform is invoked locally.
 
 
 
-https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python
 
-to build and push image to ecr
-https://towardsaws.com/build-push-docker-image-to-aws-ecr-using-github-actions-8396888a8f9e
-
-
-to create ecr in aws using terraform
-https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository
-
-aws ecr push and ecs deploy
-https://github.com/marketplace/actions/ecr-push-and-ecs-deploy
-
-AWS: create cluster which will create an ec2 instance, then in the cluster create a task, task has a related container and 
-image (which has been pushed to a ecr earlier on), some port mapping, security policy allow incoming traffic; go to 
-cluster and run the task.
-https://www.youtube.com/watch?v=zs3tyVgiBQQ
-
-create cluster
-https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster
-
-
-The following may be useful but is too complicated. Anyone who can understand and implement this post do not need this post.
-The author is just showing off his knowledge.
-https://dev.to/thnery/create-an-aws-ecs-cluster-using-terraform-g80
-
-
-## Deploy the amongus-todo Application
+## 1. Deploy the amongus-todo Application
 
 This refers to the code contained in the repository https://github.com/stanleynguyen/amongus-todo.  In order
-not to run into unnecessary confusions, I copied the code and create this separate repository instead of performing a fork. 
+not to run into additional confusions, I copied the code and create this separate repository instead of performing a fork. 
 You may refer to the original repository for original `README.me` and other documentation.
 
-## Automated Test in CI/CD pipeline
+## 2. AWS selected as the cloud provider
 
-The application has `tests/server.test.js`.  This is executed as the first step of the Github action.
+AWS was selected for this project due to earlier involvement and experiences.
 
-   
-## Dockerized/containerised the Application
+## 3. Application has some basic tests
 
-`Dockerfile` was created.  It starts with an image of `alpine`. It continues to install `nodejs` and `npm`.  
-After that, application folders and files are copied into a docker working directory by the name `app`, followed by `npm install`.
-Port `3000` is then exposed.  Finally, to make the docker image executable, entry point was created to run `npm start` on
-start up.
+The application has `tests/server.test.js`.  This is used for as basic test.
 
-Creation of `Dockerfile` does not create a docker imgae.  It only defines the parameters related to its creation. 
-Normally, command `docker build ...` is used to create it.  In this exercise, the creation will be 
-automated.
+## 4. Dockerized/containerised the Application
 
-## CI/CD Pipeline over Github Action
+`Dockerfile` was created.  This is referenced during the CI/CD process to build a docker iamge of the app.  The docker image has
+start up commands embedded to make it executable and thus containerised.
 
-`.github/workflows/docker-containers.yml` was created and it begins with these lines:
+## 5. CI/CD Pipeline over Github Action
 
-```yml
-01 name: build-push-docker-image
-02 
-03 on:
-04   push:
-05     branches:
-06       - "main"
-07
-08 jobs:
-
-```
-
-Name of this action is `build-push-docker-image', and it has a few jobs that follow.  This script is for execution
-over Github action.
-
-Lines 3 to 6 specify that jobs defined in this file will be triggered whenever there is a `push` at branch `main`.
-
-Reference was made to https://github.com/marketplace/actions/build-and-push-docker-images for this part of the exercise.
+Github action is used for CI/CD.  This is achieved by having the file `.github/workflows/cicd.yml`.
 
    
-## CI/CD Pipeline inclides Automated test
+## 6. CI/CD Pipeline inclides Automated test
 
-`.github/workflows/docker-containers.yml` was modified to add the following lines to perform code inspection:
+`.github/workflows/cicd.yml` includes `run: npm test`, and the subsequent build step `needs: run-test`:
 
 ```yml
-32   inspect:
-33     runs-on: ubuntu-latest
-34     needs: build
-...
-40         name: Download artifact
-41         uses: actions/download-artifact@v2
-42         with:
-43           name: myimage
-44           path: /tmp
-45       -
-46         name: Load image
-47         run: |
-48           docker load --input /tmp/myimage.tar
-49           docker image ls -a
-50       -
-51         name: Run Snyk to check Docker image for vulnerabilities
-52         uses: snyk/actions/docker@master
-53         env:
-54           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-55         with:
-56           image: encore428/amtodo:latest
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+	...
+      - name: Run tests
+        run: npm test
+
+  build-push:
+    runs-on: ubuntu-latest
+    needs: run-test
 ```
+
+## 7. CI/CD pipeline include Automated Deployment
+
+`.github/workflows/cicd.yml` includes steps to build and push docker image to AWS ECR:
+
+```yml
+  build-push:
+    runs-on: ubuntu-latest
+    needs: run-test
+    steps:
+	...
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: my-first-ecr-repo
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+```
+
+## 8. VM/server infrastructural resources created using Terraform
+
+Two versions of .tf files were created:
+
+- `ecr.tf.txt`: This version of `.tf` creates only one component: an aws ecr repository by the name `my_first_ecr_repo`.  Once this is created, the Github workflow can be executed to build and
+  push docker images of the app to this repository by the tag `latest`'.
+- `main.tf.txt`: This version of `.tf` has the same aws ecr repository by the name `my_first_ecr_repo`, plus another 14 components to set up the infrastructure to host the app.
+
+# Exection
+
+1. `cp ecr.tf.txt infra.tf`, followed by `terraform apply`:
+
+```bash
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform apply
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_ecr_repository.my_first_ecr_repo will be created
+  + resource "aws_ecr_repository" "my_first_ecr_repo" {
+      + arn                  = (known after apply)
+      + id                   = (known after apply)
+      + image_tag_mutability = "MUTABLE"
+      + name                 = "my-first-ecr-repo"
+      + registry_id          = (known after apply)
+      + repository_url       = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+╷
+│ Warning: Version constraints inside provider configuration blocks are deprecated
+│
+│   on infra.tf line 2, in provider "aws":
+│    2:   version = "~> 2.0"
+│
+│ Terraform 0.13 and earlier allowed provider version constraints inside the provider configuration block, but that is
+│ now deprecated and will be removed in a future version of Terraform. To silence this warning, move the provider
+│ version constraint into the required_providers block.
+╵
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_ecr_repository.my_first_ecr_repo: Creating...
+aws_ecr_repository.my_first_ecr_repo: Creation complete after 3s [id=my-first-ecr-repo]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$
+```
+
+2. Invoke Github CI/CD by making and pushing changes in the github app repository.
+
 
 - `secrets.SNYK_TOKEN` has to be set-up as one of the secrets in this repository.  The value of the secret is to be obtained
 as `Auth Token` from https://app.snyk.io/account.
@@ -233,3 +266,129 @@ the Application log has these lines:
 ## Original PDF page on the homework
 
 ![Homework pdf](./CI_CD.pdf)
+
+
+
+
+
+1. terraform main.tf to create a repository in Elastic Container Registry.
+2. github action to test app, build docker image, push to ecr.
+
+3. manually create aws cluster
+   3.1 https://us-east-2.console.aws.amazon.com/ecs/home?region=us-east-2#/clusters
+   3.2 Click [Create Cluster]
+   3.3 Pick "EC2 Linux + Networking], click [Next step]
+   3.4 Cluster name* = DTCluster
+       Provisioning Model = On-Demand Instance (default)
+       EC2 instance type* = t2.micro
+	   Number of instances* = 1 (default)
+	   EC2 AMI ID* = (default)
+	   Root EBS Volume Size (GiB) = 30  (default)
+	   Key pair = None - unable to SSH  (default)
+	   VPC = ECS Default 
+	   Subnets = ECS Default
+	   Auto assign public IP = enabled
+	   Security group = Create a new security group
+	   Security group inbound rules: CIDR block = 0.0.0.0/0
+	                                 Port range = 3000
+	   Container instance IAM role = ecsInstanceRole
+	   Click [Create]
+4. Manually create Task Definiton
+   4.1 https://us-east-2.console.aws.amazon.com/ecs/home?region=us-east-2#/taskDefinitions
+   4.2 Click [Create new Task Definition]
+   4.3 Pick "EC2", click [Next step]
+	   Task definition name = DTTask
+	   Task role = none
+	   Network mode = <default>
+	   Task execution role = ecsTaskExecutionRole
+	   Task memory = 128
+	   Task CPU = 128
+   4.4 Click [Add container]
+	   Container name = DTContainer
+	   Image = 608290413320.dkr.ecr.us-east-2.amazonaws.com/dt-ecr-1:DTCapstone (image URI, copy from ecr)
+	   Port mappings = 3000 3000
+   4.5 Click [Create] to create the Task 
+5. Manually deploy the task
+   5.1 To to Amason ECS | Clusters https://us-east-2.console.aws.amazon.com/ecs/home?region=us-east-2#/clusters
+   5.2 Click the cluster DTCluster
+   5.3 Click Tasks tab, click [Run new Task]
+       Lauch type = EC2
+	   Task Definition = DTTask
+	   Click [Run Task]
+6. Check ec2 instance public ip address
+   6.1 go to https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Home:
+   6.2 click "instances (runnung)"
+   6.3 click Instance ID of "ECS Instance  -EC2ContainerService-DTCluster"
+   6.4 click copy Public IPv4 address : ec2-18-217-121-205.us-east-2.compute.amazonaws.com
+   6.4 browser the url with above address and :3000 appended.
+   
+7. Verify CICD.
+   Edit db.json, add " - test CICD" to text of todos 1
+     "todos": [
+    {
+      "id": 1,
+      "text": "Align Engine Output - test CICD",
+      "type": "long"
+    },
+   commit the change and push to github.
+   git hub pushes new image to ecr, new image replaces old image, old image becomes <untagged>.
+   stop the task DTTask
+   Run the task DTTask by repeating part of step 5 above.
+   
+	   
+	   
+   
+	   
+	   
+
+
+
+
+Deploy a node.js application (the amongus-todo app) to a VM/server of a cloud provider of your choice. 
+
+The code is committed into a Git repository.
+
+The application will have some basic tests
+
+The application must be dockerized/containerised
+
+The project must include a CI/CD pipeline using a CI/CD tool of your choice
+
+The CI/CD pipeline must include
+- Automated tests
+- Deployment to the cloud provider
+
+The VM/server and other infrastructural resources must be created using Terraform
+- Infra creation can be done by invoking Terraform commands locally 
+
+
+
+
+
+cd /mnt/c/Users/deng/DTCapstone
+
+
+
+## References
+
+Many blog posts were consulted and tried when working on this project.
+
+- On using Github workflow to building and testing nodesjs: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python
+
+- On building and pushing image to ecr: https://towardsaws.com/build-push-docker-image-to-aws-ecr-using-github-actions-8396888a8f9e
+
+- On using terraform to create ecr in aws: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository
+
+- On aws ecr push and ecs deploy: https://github.com/marketplace/actions/ecr-push-and-ecs-deploy
+
+- A youtube clip om creating aws cluster, which will create an ec2 instance, then in the cluster create a task, task has a related container and image 
+(which has been pushed to a ecr earlier on), some port mapping, security policy allow incoming traffic; go to cluster and run the task. https://www.youtube.com/watch?v=zs3tyVgiBQQ
+
+- On using terraform to create aws cluster: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster
+
+- On deploying an AWS ECS Cluster of EC2 Instances With Terraform: https://medium.com/swlh/creating-an-aws-ecs-cluster-of-ec2-instances-with-terraform-85a10b5cfbe3
+
+- On creating AWS ECS cluster and deploying a nodejs application: https://dev.to/thnery/create-an-aws-ecs-cluster-using-terraform-g80
+
+- The most relevant post that covers this project: https://medium.com/avmconsulting-blog/how-to-deploy-a-dockerised-node-js-application-on-aws-ecs-with-terraform-3e6bceb48785
+

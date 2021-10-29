@@ -7,9 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 
 # terraform
-terraform/.terraform.lock.hcl
-terraform/.terraform/*
-terraform/terraform.tfstate*
+terraform/aws/.terraform.lock.hcl
+terraform/aws/.terraform/*
+terraform/aws/terraform.tfstate*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
