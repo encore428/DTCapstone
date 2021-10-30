@@ -2,7 +2,8 @@
 
 ## Requirements:
 
-Propject requirements are found [here](https://docs.google.com/document/d/1E2c-eUrI4hmEM7X0IqdIMRrd132XpIDH/edit)
+Project requirements are found [here](https://docs.google.com/document/d/1E2c-eUrI4hmEM7X0IqdIMRrd132XpIDH/edit), summarised in the following table, 
+and elaborated below.
 
 Project Requirements                                                                | Fulfillment
 ------------------------------------------------------------------------------------|--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ Project Requirements                                                            
 ## 1. Deploy the amongus-todo Application
 
 This refers to the code contained in the repository https://github.com/stanleynguyen/amongus-todo.  In order
-not to run into additional confusions, I copied the code and create this separate repository instead of performing a fork. 
+not to run into additional confusions, the repository is replicated here instead of performing a fork. 
 You may refer to the original repository for original `README.me` and other documentation.
 
 ## 2. AWS selected as the cloud provider
@@ -29,7 +30,7 @@ AWS was selected for this project due to earlier practices.
 
 ## 3. Application has some basic tests
 
-The application has `tests/server.test.js`.  This is used for basic test.
+The application has [`tests/server.test.js`](./tests/server.test.js).  This is used for basic test.
 
 ## 4. Dockerized/containerised the Application
 
