@@ -129,5 +129,5 @@ The most relevant post that covers this project: https://medium.com/avmconsultin
 
 ## Manual Infrastruture
 
-During the early stage opf working on this project, I have started by creating the infrastructure manually, with the intention that such manual procedures can be translated into Terraform scripts.
-However, it was later realized that there is no straight forward translation from manual process to terraform scripts.  The [manual process](./manualinfra.md) is recorded here for reference though.
+During the early stage of working on this project, I started by creating the infrastructure manually, with the intention that such manual procedures be translated into HashiCorp Configuration Language.
+However, it was later realized that there is no straight forward translation.  The [manual process](./manualinfra.md) is recorded here for reference nevertheless.
