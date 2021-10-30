@@ -1,8 +1,14 @@
-# Fundamentals in Developer Tools - Capstone Project
+# Fundamentals in Developer Tools - Homework and Capstone Project
 
 Submitted by: Lee Sik On
 
-## Requirements:
+There are two homework and one Capstone project.
+
+- [Day 3 homework](https://github.com/encore428/amtodo): Dockerize an app ad deploy to heroku.
+- [Day 4 homework](https://github.com/encore428/amtodo): Terraform to create aws ec2 instance with secured SSH access
+- [Capstone Project](https://github.com/encore428/DTCapstone): Full infrastructre in code and CICD
+
+## Capstone Project Requirements:
 
 Project requirements are found [here](https://docs.google.com/document/d/1E2c-eUrI4hmEM7X0IqdIMRrd132XpIDH/edit), summarised in the following table, 
 and elaborated below.
