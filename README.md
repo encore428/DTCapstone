@@ -40,7 +40,6 @@ start up commands embedded to make it executable and thus containerised.
 ## 5. CI/CD Pipeline over Github Action
 
 Github action is used for CI/CD.  This is achieved by having the file `.github/workflows/cicd.yml`.
-
    
 ## 6. CI/CD Pipeline inclides Automated test
 
@@ -93,11 +92,15 @@ Two versions of .tf files were created:
 ## 9. Manual Local invokation of terraform infra creation
 
 The process of using this CI/CD facility is summarised as:
-1. Invoke Terraform to create ecr in AWS.
-2. Push the app change to Github, which performs app test and docker image build, and push the built image to AWS in ecr.
-3. Invoke Terraform to create the remainingecr in AWS.
+1. Invoke [Terraform `main.tf`](./demo1.md) to create full infrastructure in AWS.
+2. [Push the application to Github](./github1.md), which performs app test and docker image build, and push the built image to AWS in ecr.  AWS in turn brings up the application.
+3. [Verify application is running](./appver.md).
+4. Make application change, [push the application change to Github](./github2.md), which performs app test and docker image build, and push the new image to AWS in ecr.
+5. AWS however does not automtically deploy the new image onto the running instances.
+6. To deploy the new application image, invoke [Terraform `ecr.tf`](./demo2.md) to tear down the infrastructure leaving only ecr, then invoke [Terraform `main.tf`](./demo3.md) again to re-create the full infrastructure.
+7. Verify that updated application is running.
+8. Finally [tear down](./teardown.md) the entire infratructure in AWS.
 
-Details of the demonstration 
 
 ## References
 
