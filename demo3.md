@@ -1,3 +1,7 @@
+## Terraform main.tf
+
+Invoke Terraform using `main.tf.txt` again to re-build entire infrastructure from ecr onward.
+
 ```
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ cp main.tf.txt infra.tf
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ terraform apply

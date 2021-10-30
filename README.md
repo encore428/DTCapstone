@@ -98,7 +98,7 @@ The process of using this CI/CD facility is summarised as:
 4. Make application change, [push the application change to Github](./github2.md), which performs app test and docker image build, and push the new image to AWS in ecr.
 5. AWS however does not automtically deploy the new image onto the running instances.
 6. To deploy the new application image, invoke [Terraform `ecr.tf`](./demo2.md) to tear down the infrastructure leaving only ecr, then invoke [Terraform `main.tf`](./demo3.md) again to re-create the full infrastructure.
-7. Verify that updated application is running.
+7. [Verify that updated application is running](./appver2.md).
 8. Finally [tear down](./teardown.md) the entire infratructure in AWS.
 
 

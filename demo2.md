@@ -1,3 +1,7 @@
+## Terraform ecr.tf
+
+Invoke Terraform using `ecr.tf.txt` to tear down the entire infrastructure leaving only ecr.
+
 ```
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ cp ecr.tf.txt infra.tf
 deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$ cat infra.tf
