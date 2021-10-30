@@ -2,17 +2,19 @@
 
 ## Requirements:
 
+Propject requirements are found [here](https://docs.google.com/document/d/1E2c-eUrI4hmEM7X0IqdIMRrd132XpIDH/edit)
+
 Project Requirements                                                                 | Fulfillment
 -------------------------------------------------------------------------------------|--------------------------------------------------------------------------
-1.Deploy a node.js application                                                       | The amongus-todo app
-2.to a VM/server of a cloud provider of your choice.                                 | aws.amazon.com
-3.The application will have some basic tests                                         | the application has `tests/server.test.js`
-4.The application must be dockerized/containerised                                   | docker image is built as part of Github action
-5.The project must include a CI/CD pipeline using a CI/CD tool of your choice        | Github action is used
-6.The CI/CD pipeline must include Automated tests                                    | tests/server.test.js is executed as part of Github action
-7.The CI/CD pipeline must include Automated Deployment to the cloud provider         | docker image is built and pushed to ams ecr as part of Github action
-8.The VM/server and other infrastructural resources must be created using Terraform  | full set of infrastructure is build using terraform
-9.Infra creation can be done by invoking Terraform commands locally                  | terraform is invoked locally.
+1. Deploy a node.js application                                                      | The amongus-todo app
+2. to a VM/server of a cloud provider of your choice.                                | aws.amazon.com
+3. The application will have some basic tests                                        | the application has `tests/server.test.js`
+4. The application must be dockerized/containerised                                  | docker image is built as part of Github action
+5. The project must include a CI/CD pipeline using a CI/CD tool of your choice       | Github action is used
+6. The CI/CD pipeline must include Automated tests                                   | tests/server.test.js is executed as part of Github action
+7. The CI/CD pipeline must include Automated Deployment to the cloud provider        | docker image is built and pushed to ams ecr as part of Github action
+8. The VM/server and other infrastructural resources must be created using Terraform | full set of infrastructure is build using terraform
+9. Infra creation can be done by invoking Terraform commands locally                 | terraform is invoked locally.
 
 
 ## 1. Deploy the amongus-todo Application
