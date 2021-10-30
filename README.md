@@ -4,7 +4,7 @@ Submitted by: Lee Sik On
 
 There are two homework and one Capstone project.
 
-- [Day 3 homework](https://github.com/encore428/amtodo): Dockerize an app ad deploy to heroku.
+- [Day 3 homework](https://github.com/encore428/amtodo): Dockerize an app and deploy to heroku.
 - [Day 4 homework](https://github.com/encore428/amtodo): Terraform to create aws ec2 instance with secured SSH access
 - [Capstone Project](https://github.com/encore428/DTCapstone): Full infrastructre in code and CICD
 
