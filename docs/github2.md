@@ -14,7 +14,7 @@ Modify the app by adding ` (more text)` to "text" of the first record in `db.jso
 ```
 
 Workflow executed successfully:
-![github workflow in action](./docs/img/cicd2.png)
+![github workflow in action](./img/cicd2.png)
 
 ECR has an updated image
-![ECR new image tag](./docs/img/ecr3.png)
+![ECR new image tag](./img/ecr3.png)

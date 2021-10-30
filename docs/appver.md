@@ -4,37 +4,37 @@ Review the infrastructure.
 
 ECS Cluster created:
 
-![ECS Cluster created](./docs/img/ecs.png)
+![ECS Cluster created](./img/ecs.png)
 
 Cluster details:
 
-![ECS Cluster details](./docs/img/cluster.png)
+![ECS Cluster details](./img/cluster.png)
 
 Service details:
 
-![ECS Service details](./docs/img/service.png)
+![ECS Service details](./img/service.png)
 
 Tasks in Service
 
-![ECS Service Tasks](./docs/img/tasks.png)
+![ECS Service Tasks](./img/tasks.png)
 
 Target group
 
-![ECS target group](./docs/img/target_gp1.png)
+![ECS target group](./img/target_gp1.png)
 
 Target group details
 
-![ECS target group details](./docs/img/target_gp3.png)
+![ECS target group details](./img/target_gp3.png)
 
 Load balancer, the URL to access the app can be found under `DNS nmae`:
 
-![Load balancer](./docs/img/loadbalancer.png)
+![Load balancer](./img/loadbalancer.png)
 
 App front page (test-lb-tf-145880904.us-east-2.elb.amazonaws.com):
 
-![App front page](./docs/img/app1.png)
+![App front page](./img/app1.png)
 
 App todos page (http://test-lb-tf-145880904.us-east-2.elb.amazonaws.com/todos):
 
-![App todos page](./docs/img/todo1.png)
+![App todos page](./img/todo1.png)
 

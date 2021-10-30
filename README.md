@@ -94,14 +94,14 @@ Two versions of .tf files were created:
 ## 9. Manual Local invokation of terraform infra creation
 
 The process of using this CI/CD facility is summarised as:
-1. Invoke [Terraform `main.tf`](./demo1.md) to create full infrastructure in AWS.
-2. [Push the application to Github](./github1.md), which performs app test and docker image build, and push the built image to AWS in ecr.  AWS in turn brings up the application.
-3. [Verify application is running](./appver.md).
-4. Make application change, [push the application change to Github](./github2.md), which performs app test and docker image build, and push the new image to AWS in ecr.
+1. Invoke [Terraform `main.tf`](./docs/demo1.md) to create full infrastructure in AWS.
+2. [Push the application to Github](./docs/github1.md), which performs app test and docker image build, and push the built image to AWS in ecr.  AWS in turn brings up the application.
+3. [Verify application is running](./docs/appver.md).
+4. Make application change, [push the application change to Github](./docs/github2.md), which performs app test and docker image build, and push the new image to AWS in ecr.
 5. AWS however does not automtically deploy the new image onto the running instances.
-6. To deploy the new application image, invoke [Terraform `ecr.tf`](./demo2.md) to tear down the infrastructure leaving only ecr, then invoke [Terraform `main.tf`](./demo3.md) again to re-create the full infrastructure.
-7. [Verify that updated application is running](./appver2.md).
-8. Finally [tear down](./teardown.md) the entire infratructure in AWS.
+6. To deploy the new application image, invoke [Terraform `ecr.tf`](./docs/demo2.md) to tear down the infrastructure leaving only ecr, then invoke [Terraform `main.tf`](./docs/demo3.md) again to re-create the full infrastructure.
+7. [Verify that updated application is running](./docs/appver2.md).
+8. Finally [tear down](./docs/teardown.md) the entire infratructure in AWS.
 
 
 ## References
@@ -130,4 +130,4 @@ The most relevant post that covers this project: https://medium.com/avmconsultin
 ## Manual Infrastruture
 
 During the early stage of working on this project, I started by creating the infrastructure manually, with the intention that such manual procedures be translated into HashiCorp Configuration Language.
-However, it was later realized that there is no straight forward translation.  The [manual process](./manualinfra.md) is recorded here for reference nevertheless.
+However, it was later realized that there is no straight forward translation.  The [manual process](./docs/manualinfra.md) is recorded here for reference nevertheless.

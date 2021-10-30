@@ -404,4 +404,5 @@ aws_ecs_service.my_first_service: Creating...
 aws_ecs_service.my_first_service: Creation complete after 3s [id=arn:aws:ecs:us-east-2:608290413320:service/my-cluster/my-first-service]
 
 Apply complete! Resources: 14 added, 0 changed, 0 destroyed.
-deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$```
+deng@LSOASUS2019:/mnt/c/Users/deng/DTCapstone/terraform/aws$
+```
