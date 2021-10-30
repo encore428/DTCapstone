@@ -1,5 +1,7 @@
 # Fundamentals in Developer Tools - Capstone Project
 
+Submitted by: Lee Sik On
+
 ## Requirements:
 
 Project requirements are found [here](https://docs.google.com/document/d/1E2c-eUrI4hmEM7X0IqdIMRrd132XpIDH/edit), summarised in the following table, 
@@ -125,3 +127,7 @@ On creating AWS ECS cluster and deploying a nodejs application: https://dev.to/t
 
 The most relevant post that covers this project: https://medium.com/avmconsulting-blog/how-to-deploy-a-dockerised-node-js-application-on-aws-ecs-with-terraform-3e6bceb48785
 
+## Manual Infrastruture
+
+During the early stage opf working on this project, I have started by creating the infrastructure manually, with the intention that such manual procedures can be translated into Terraform scripts.
+However, it was later realized that there is no straight forward translation from manual process to terraform scripts.  The [manual process](./manualinfra.md) is recorded here for reference though.
