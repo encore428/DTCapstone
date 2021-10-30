@@ -116,7 +116,7 @@ On using terraform to create ecr in aws: https://registry.terraform.io/providers
 
 On aws ecr push and ecs deploy: https://github.com/marketplace/actions/ecr-push-and-ecs-deploy
 
-A youtube clip om creating aws cluster, which will create an ec2 instance, then in the cluster create a task, task has a related container and image 
+A youtube clip on creating aws cluster, which will create an ec2 instance, then in the cluster create a task, task has a related container and image 
 (which has been pushed to a ecr earlier on), some port mapping, security policy allow incoming traffic; go to cluster and run the task. https://www.youtube.com/watch?v=zs3tyVgiBQQ
 
 On using terraform to create aws cluster: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster
