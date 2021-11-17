@@ -137,3 +137,6 @@ The most relevant post that covers this project: https://medium.com/avmconsultin
 
 During the early stage of working on this project, I started by creating the infrastructure manually, with the intention that such manual procedures be translated into HashiCorp Configuration Language.
 However, it was later realized that there is no straight forward translation.  The [manual process](./docs/manualinfra.md) is recorded here for reference nevertheless.
+
+2021-11-17 Stanley recommended looking into this blog for tips on how to translate manual process into terraform:
+https://github.com/GoogleCloudPlatform/terraformer
